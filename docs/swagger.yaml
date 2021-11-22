@@ -1,0 +1,184 @@
+basePath: /
+consumes:
+- application/json
+definitions:
+  GenericError:
+    description: GenericError GenericError GenericError is a generic error message
+      returned by a server
+    properties:
+      message:
+        description: message
+        type: string
+        x-go-name: Message
+    type: object
+    x-go-package: github.com/bennysiahaan/twitter-clone/client/models
+  Tweet:
+    description: Tweet Tweet Tweet defines the structure for an API tweet
+    properties:
+      body:
+        description: the body of this tweet
+        maxLength: 140
+        minLength: 1
+        type: string
+        x-go-name: Body
+      contentUrl:
+        description: the URL of embedded content
+        maxLength: 1024
+        type: string
+        x-go-name: ContentURL
+      tweetId:
+        description: the id for the tweet (auto-generated)
+        pattern: '[0-9a-zA-Z-]{36}'
+        type: string
+        x-go-name: TweetID
+      userId:
+        description: the id of the user that posts this tweet
+        pattern: '[0-9a-zA-Z-]{36}'
+        type: string
+        x-go-name: UserID
+    required:
+    - userId
+    - body
+    type: object
+    x-go-package: github.com/bennysiahaan/twitter-clone/client/models
+  User:
+    description: User defines the structure for an API user
+    properties:
+      avatarUrl:
+        type: string
+        x-go-name: ProfileImageURL
+      displayName:
+        type: string
+        x-go-name: DisplayName
+      email:
+        type: string
+        x-go-name: Email
+      userId:
+        type: string
+        x-go-name: UserID
+      username:
+        type: string
+        x-go-name: Username
+    type: object
+    x-go-package: github.com/bennysiahaan/twitter-clone/data
+  ValidationError:
+    description: ValidationError ValidationError ValidationError is a collection of
+      validation error messages
+    properties:
+      messages:
+        description: messages
+        items:
+          type: string
+        type: array
+        x-go-name: Messages
+    type: object
+    x-go-package: github.com/bennysiahaan/twitter-clone/client/models
+info:
+  description: Documentation for Twitter Clone API
+  title: Twitter Clone API
+  version: 1.0.0
+paths:
+  /:
+    get:
+      description: Return the user's timeline from the database
+      operationId: GetTimeline
+      responses:
+        "200":
+          $ref: '#/responses/tweetsResponse'
+        "404":
+          $ref: '#/responses/errorResponse'
+        "500":
+          $ref: '#/responses/errorResponse'
+      tags:
+      - tweets
+  /create:
+    post:
+      description: Post a new tweet
+      operationId: PostTweet
+      responses:
+        "204":
+          $ref: '#/responses/noContentResponse'
+        "404":
+          $ref: '#/responses/errorResponse'
+        "422":
+          $ref: '#/responses/errorValidation'
+      tags:
+      - tweets
+  /edit:
+    put:
+      description: Edit the body of a tweet
+      operationId: EditTweet
+      responses:
+        "204":
+          $ref: '#/responses/noContentResponse'
+        "404":
+          $ref: '#/responses/errorResponse'
+        "422":
+          $ref: '#/responses/errorValidation'
+      tags:
+      - tweets
+  /tweet/{tweetId}:
+    delete:
+      description: Delete a tweet
+      operationId: DeleteTweet
+      parameters:
+      - description: The id of the tweet for which the operation relates
+        in: path
+        name: tweetId
+        pattern: '[0-9a-zA-Z-]{36}'
+        required: true
+        type: string
+        x-go-name: TweetID
+      responses:
+        "204":
+          $ref: '#/responses/noContentResponse'
+        "404":
+          $ref: '#/responses/errorResponse'
+        "422":
+          $ref: '#/responses/errorValidation'
+      tags:
+      - tweets
+    get:
+      description: Return a tweet that matches the given tweetId from the database
+      operationId: GetTweet
+      parameters:
+      - description: The id of the tweet for which the operation relates
+        in: path
+        name: tweetId
+        pattern: '[0-9a-zA-Z-]{36}'
+        required: true
+        type: string
+        x-go-name: TweetID
+      responses:
+        "200":
+          $ref: '#/responses/tweetResponse'
+        "404":
+          $ref: '#/responses/errorResponse'
+      tags:
+      - tweets
+produces:
+- application/json
+responses:
+  errorResponse:
+    description: Generic error message returned as a string
+    schema:
+      $ref: '#/definitions/GenericError'
+  errorValidation:
+    description: Validation errors defined as an array of strings
+    schema:
+      $ref: '#/definitions/ValidationError'
+  noContentResponse:
+    description: No content is required by this API endpoint
+  tweetResponse:
+    description: Data structure representing a single tweet
+    schema:
+      $ref: '#/definitions/Tweet'
+  tweetsResponse:
+    description: A list of tweets returns in the reponse
+    schema:
+      items:
+        $ref: '#/definitions/Tweet'
+      type: array
+schemes:
+- http
+swagger: "2.0"

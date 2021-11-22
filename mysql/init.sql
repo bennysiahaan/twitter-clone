@@ -1,0 +1,24 @@
+DROP DATABASE IF EXISTS twitter_clone;
+CREATE DATABASE twitter_clone;
+
+USE twitter_clone
+
+CREATE TABLE users (
+  user_id VARCHAR(36) UNIQUE NOT NULL,
+  email VARCHAR(254) NOT NULL,
+  username VARCHAR(15) NOT NULL,
+  display_name VARCHAR(20) NOT NULL,
+  profile_image_url VARCHAR(1024),
+  PRIMARY KEY ( user_id )
+) ENGINE=InnoDB;
+
+CREATE TABLE tweets (
+  tweet_id VARCHAR(36) UNIQUE NOT NULL,
+  user_id VARCHAR(36) NOT NULL,
+  body VARCHAR(140) NOT NULL,
+  content_url VARCHAR(1024),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
+  PRIMARY KEY ( tweet_id ),
+  FOREIGN KEY ( user_id ) REFERENCES users(user_id)
+) ENGINE=InnoDB;
