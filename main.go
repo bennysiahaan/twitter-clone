@@ -20,14 +20,14 @@ import (
 var BindAddress = ":9090"
 
 func main() {
-    
-    l := log.New(os.Stdout, "twitter-clone: ", log.LstdFlags)
+
+	l := log.New(os.Stdout, "twitter-clone: ", log.LstdFlags)
 	v := data.NewTweetValidation()
-    
+
 	TweetHandler := handlers.NewTweet(l, v)
-    
-    // CORS
-    CORSHandler := gohandlers.CORS(gohandlers.AllowedOrigins([]string{"*"}))
+
+	// CORS
+	CORSHandler := gohandlers.CORS(gohandlers.AllowedOrigins([]string{"*"}))
 
 	router := mux.NewRouter()
 
@@ -36,28 +36,28 @@ func main() {
 	GetHandler.HandleFunc("/home", TweetHandler.GetTimeline)
 
 	GetHandler.HandleFunc("/tweet/{tweetId:[0-9a-zA-Z-]{36}}", TweetHandler.GetTweet)
-    
+
 	PostHandler := router.Methods(http.MethodPost).Subrouter()
 	PostHandler.HandleFunc("/create", TweetHandler.Post)
 	PostHandler.Use(TweetHandler.MiddlewareValidateTweet)
-    
+
 	PutHandler := router.Methods(http.MethodPut).Subrouter()
 	PutHandler.HandleFunc("/edit", TweetHandler.Edit)
 	PutHandler.Use(TweetHandler.MiddlewareValidateTweet)
-    
+
 	DeleteHandler := router.Methods(http.MethodDelete).Subrouter()
 	DeleteHandler.HandleFunc("/tweet/{tweetId:[0-9a-zA-Z-]{36}}", TweetHandler.Delete)
-    
+
 	opts := middleware.RedocOpts{SpecURL: "/swagger.yaml"}
 	sh := middleware.Redoc(opts, nil)
-    
+
 	GetHandler.Handle("/docs", sh)
 	GetHandler.Handle("/swagger.yaml", http.FileServer(http.Dir("./docs")))
-    
-    // Redirects
+
+	// Redirects
 	GetHandler.HandleFunc("/{tweetId:[0-9a-zA-Z-]{36}}", TweetHandler.RedirectTweet)
 	GetHandler.HandleFunc("/", TweetHandler.RedirectHome)
-    
+
 	srv := &http.Server{
 		Addr:         BindAddress,
 		Handler:      CORSHandler(router),
@@ -81,7 +81,7 @@ func main() {
 		err := srv.ListenAndServe()
 		if err != nil {
 			l.Printf("Error starting server: %s\n", err)
-            os.Exit(1)
+			os.Exit(1)
 		}
 	}()
 

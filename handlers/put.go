@@ -18,22 +18,22 @@ import (
 func (t *Tweet) Edit(rw http.ResponseWriter, r *http.Request) {
 	t.l.Println("Handle PUT Tweet")
 
-    Tweet := r.Context().Value(KeyTweet{}).(*data.Tweet)
-    
-    t.l.Println("[DEBUG] Updating record id", Tweet.TweetID)
+	Tweet := r.Context().Value(KeyTweet{}).(*data.Tweet)
+
+	t.l.Println("[DEBUG] Updating record id", Tweet.TweetID)
 	err := data.EditTweet(*Tweet)
 	if err == data.ErrTweetNotFound {
 		t.l.Println("[ERROR] tweet not found", err)
-        rw.WriteHeader(http.StatusNotFound)
-        data.ToJSON(&GenericError{Message: "Tweet not found in database"}, rw)
+		rw.WriteHeader(http.StatusNotFound)
+		data.ToJSON(&GenericError{Message: "Tweet not found in database"}, rw)
 		return
 	}
 	if err != nil {
-        t.l.Println("[ERROR] updating tweet", err)
-        rw.WriteHeader(http.StatusUnprocessableEntity)
-        data.ToJSON(&GenericError{Message: err.Error()}, rw)
-        return
+		t.l.Println("[ERROR] updating tweet", err)
+		rw.WriteHeader(http.StatusUnprocessableEntity)
+		data.ToJSON(&GenericError{Message: err.Error()}, rw)
+		return
 	}
 
-    rw.WriteHeader(http.StatusNoContent)
+	rw.WriteHeader(http.StatusNoContent)
 }

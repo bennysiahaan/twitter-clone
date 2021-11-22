@@ -56,9 +56,9 @@ func (t *Tweet) GetTimeline(rw http.ResponseWriter, r *http.Request) {
 			Username:    ui.Username,
 			DisplayName: ui.DisplayName,
 			AvatarURL:   ui.ProfileImageURL,
-            Body: tweet.Body,
-            ContentURL: tweet.ContentURL,
-            UpdatedAt: tweet.UpdatedAt,
+			Body:        tweet.Body,
+			ContentURL:  tweet.ContentURL,
+			UpdatedAt:   tweet.UpdatedAt,
 		})
 	}
 

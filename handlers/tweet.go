@@ -42,7 +42,7 @@ type ValidationError struct {
 func GetTweetIDParam(r *http.Request) string {
 	// parse the tweet id from the url
 	vars := mux.Vars(r)
-    id := vars["tweetId"]
+	id := vars["tweetId"]
 
 	return id
 }

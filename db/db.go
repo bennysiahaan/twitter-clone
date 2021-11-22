@@ -24,17 +24,17 @@ func ConnectDB(l *log.Logger) {
 	if err != nil {
 		l.Fatal(err)
 	}
-    
+
 	db.SetConnMaxLifetime(time.Minute * 3)
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(10)
-    
+
 	err = db.Ping()
 	if err != nil {
-        l.Fatal(err)
+		l.Fatal(err)
 	}
 
-    DB = db
+	DB = db
 
 	l.Println("Connected to database")
 }

@@ -39,7 +39,7 @@ type Tweet struct {
 	ContentURL string `json:"contentUrl"`
 
 	// the date when this tweet was created
-    //
+	//
 	// required: false
 	CreatedAt string `json:"createdAt"`
 
@@ -72,8 +72,8 @@ func GetTweets() (Tweets, error) {
 			&tweet.UserID,
 			&tweet.Body,
 			&tweet.ContentURL,
-            &tweet.CreatedAt,
-            &tweet.UpdatedAt,
+			&tweet.CreatedAt,
+			&tweet.UpdatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -97,8 +97,8 @@ func GetTweetByID(id string) (*Tweet, error) {
 		&tweet.UserID,
 		&tweet.Body,
 		&tweet.ContentURL,
-        &tweet.CreatedAt,
-        &tweet.UpdatedAt,
+		&tweet.CreatedAt,
+		&tweet.UpdatedAt,
 	); err != nil {
 		if err == sql.ErrNoRows {
 			return &tweet, ErrTweetNotFound

@@ -14,16 +14,16 @@ func (t *Tweet) MiddlewareValidateTweet(next http.Handler) http.Handler {
 
 		err := data.FromJSON(Tweet, r.Body)
 		if err != nil {
-            t.l.Println("[ERROR] deserializing tweet", err)
-            rw.WriteHeader(http.StatusBadRequest)
-            data.ToJSON(&GenericError{Message: err.Error()}, rw)
+			t.l.Println("[ERROR] deserializing tweet", err)
+			rw.WriteHeader(http.StatusBadRequest)
+			data.ToJSON(&GenericError{Message: err.Error()}, rw)
 			return
 		}
 
 		errs := t.v.Validate(Tweet)
 		if len(errs) != 0 {
 			t.l.Println("[ERROR] validating tweet", err)
-            rw.WriteHeader(http.StatusUnprocessableEntity)
+			rw.WriteHeader(http.StatusUnprocessableEntity)
 			data.ToJSON(&ValidationError{Messages: errs.Errors()}, rw)
 			return
 		}

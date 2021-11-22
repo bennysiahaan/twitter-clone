@@ -35,17 +35,17 @@ func GetUserInfo(id string) (*UserInfo, error) {
 	DB := db.GetDB()
 	var ui UserInfo
 
-    row := DB.QueryRow("SELECT username, display_name, profile_image_url FROM users WHERE user_id = ?", id)
-    if err := row.Scan(
-        &ui.Username,
-        &ui.DisplayName,
-        &ui.ProfileImageURL,
-    ); err != nil {
-        if err == sql.ErrNoRows {
-            return &ui, ErrUserNotFound
-        }
-        return &ui, err
-    }
+	row := DB.QueryRow("SELECT username, display_name, profile_image_url FROM users WHERE user_id = ?", id)
+	if err := row.Scan(
+		&ui.Username,
+		&ui.DisplayName,
+		&ui.ProfileImageURL,
+	); err != nil {
+		if err == sql.ErrNoRows {
+			return &ui, ErrUserNotFound
+		}
+		return &ui, err
+	}
 
-    return &ui, nil
+	return &ui, nil
 }

@@ -20,20 +20,20 @@ func (t *Tweet) Post(rw http.ResponseWriter, r *http.Request) {
 
 	Tweet := r.Context().Value(KeyTweet{}).(*data.Tweet)
 
-    t.l.Printf("[DEBUG] Inserting tweet: %#v\n", Tweet)
-    err := data.AddTweet(*Tweet)
+	t.l.Printf("[DEBUG] Inserting tweet: %#v\n", Tweet)
+	err := data.AddTweet(*Tweet)
 	if err == data.ErrTweetNotFound {
 		t.l.Println("[ERROR] tweet not found", err)
-        rw.WriteHeader(http.StatusNotFound)
-        data.ToJSON(&GenericError{Message: "Tweet not found in database"}, rw)
+		rw.WriteHeader(http.StatusNotFound)
+		data.ToJSON(&GenericError{Message: "Tweet not found in database"}, rw)
 		return
 	}
 	if err != nil {
-        t.l.Println("[ERROR] creating tweet", err)
-        rw.WriteHeader(http.StatusUnprocessableEntity)
-        data.ToJSON(&GenericError{Message: err.Error()}, rw)
-        return
+		t.l.Println("[ERROR] creating tweet", err)
+		rw.WriteHeader(http.StatusUnprocessableEntity)
+		data.ToJSON(&GenericError{Message: err.Error()}, rw)
+		return
 	}
 
-    rw.WriteHeader(http.StatusNoContent)
+	rw.WriteHeader(http.StatusNoContent)
 }
